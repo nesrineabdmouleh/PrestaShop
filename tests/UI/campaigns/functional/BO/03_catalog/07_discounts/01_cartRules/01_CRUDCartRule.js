@@ -29,24 +29,79 @@ const baseContext = 'functional_BO_catalog_discounts_cartRules_CRUDCartRule';
 let browserContext;
 let page;
 
-const newCartRuleData = new CartRuleFaker(
+const cartRuleWithoutCode = new CartRuleFaker(
   {
-    code: '4QABV6L3',
-    customer: DefaultCustomer.email,
+    name: 'withoutCode',
+    code: '',
+    discountType: 'Percent',
+    discountPercent: 20,
+  },
+);
+const cartRuleHighlightDisabled = new CartRuleFaker(
+  {
+    generateCode: true,
+    highlight: false,
     discountType: 'Percent',
     discountPercent: 20,
   },
 );
 
-const editCartRuleData = new CartRuleFaker(
+const cartRuleHighlightEnabled = new CartRuleFaker(
   {
-    code: '3PAJA6B3',
+    generateCode: true,
+    highlight: true,
     discountType: 'Percent',
-    discountPercent: 30,
+    discountPercent: 20,
   },
 );
 
-describe('CRUD cart rule', async () => {
+const cartRulepartialUseEnabled = new CartRuleFaker(
+  {
+    generateCode: true,
+    partialUse: true,
+    discountType: 'Percent',
+    discountPercent: 20,
+  },
+);
+
+const cartRulepartialUseDisabled = new CartRuleFaker(
+  {
+    generateCode: true,
+    partialUse: false,
+    discountType: 'Percent',
+    discountPercent: 20,
+  },
+);
+
+const cartRulePriority = new CartRuleFaker(
+  {
+    generateCode: true,
+    priority: 2,
+    discountType: 'Percent',
+    discountPercent: 20,
+  },
+);
+
+const cartRuleStatusDisabled = new CartRuleFaker(
+  {
+    generateCode: true,
+    status: false,
+    discountType: 'Percent',
+    discountPercent: 20,
+  },
+);
+
+const cartRuleLimitSingleCustomer = new CartRuleFaker(
+  {
+    generateCode: true,
+    customer: 'pub@prestashop.com',
+    discountType: 'Percent',
+    discountPercent: 20,
+  },
+);
+
+
+describe('Catalog - Discounts : CRUD cart rule', async () => {
   // before and after functions
   before(async function () {
     browserContext = await helper.createBrowserContext(this.browser);
@@ -74,105 +129,83 @@ describe('CRUD cart rule', async () => {
     await expect(pageTitle).to.contains(cartRulesPage.pageTitle);
   });
 
-  describe('Create cart rule', async () => {
-    it('should go to new cart rule page', async function () {
-      await testContext.addContextItem(this, 'testIdentifier', 'goToNewCartRulePage', baseContext);
+  // 1 - Create cart rule without code
+  describe('case 1 : Create cart rule without code and check it on FO', async () => {
+    describe('Create cart rule on BO', async () => {
+      it('should go to new cart rule page', async function () {
+        await testContext.addContextItem(this, 'testIdentifier', 'goToNewCartRulePage', baseContext);
 
-      await cartRulesPage.goToAddNewCartRulesPage(page);
-      const pageTitle = await addCartRulePage.getPageTitle(page);
-      await expect(pageTitle).to.contains(addCartRulePage.pageTitle);
+        await cartRulesPage.goToAddNewCartRulesPage(page);
+        const pageTitle = await addCartRulePage.getPageTitle(page);
+        await expect(pageTitle).to.contains(addCartRulePage.pageTitle);
+      });
+
+      it('should create new cart rule', async function () {
+        await testContext.addContextItem(this, 'testIdentifier', 'createCartRule', baseContext);
+
+        const validationMessage = await addCartRulePage.createEditCartRules(page, cartRuleWithoutCode);
+        await expect(validationMessage).to.contains(addCartRulePage.successfulCreationMessage);
+      });
     });
 
-    it('should create new cart rule', async function () {
-      await testContext.addContextItem(this, 'testIdentifier', 'createCartRule', baseContext);
+    describe('Verify discount created on FO', async () => {
+      it('should view my shop', async function () {
+        await testContext.addContextItem(this, 'testIdentifier', 'viewMyShopToCheckCreatedDiscount', baseContext);
 
-      const validationMessage = await addCartRulePage.createEditCartRules(page, newCartRuleData);
-      await expect(validationMessage).to.contains(addCartRulePage.successfulCreationMessage);
-    });
-  });
+        // View my shop and init pages
+        page = await addCartRulePage.viewMyShop(page);
 
-  describe('Verify created cart rule in FO', async () => {
-    it('should view my shop', async function () {
-      await testContext.addContextItem(this, 'testIdentifier', 'viewMyShopToCheckCreatedDiscount', baseContext);
+        await foHomePage.changeLanguage(page, 'en');
+        const isHomePage = await foHomePage.isHomePage(page);
+        await expect(isHomePage, 'Fail to open FO home page').to.be.true;
+      });
 
-      // View my shop and init pages
-      page = await addCartRulePage.viewMyShop(page);
+      it('should go to the first product page', async function () {
+        await testContext.addContextItem(this, 'testIdentifier', 'goToFirstProductPage_1', baseContext);
 
-      await foHomePage.changeLanguage(page, 'en');
-      const isHomePage = await foHomePage.isHomePage(page);
-      await expect(isHomePage, 'Fail to open FO home page').to.be.true;
-    });
+        await foHomePage.goToProductPage(page, 1);
 
-    it('should go to login page', async function () {
-      await testContext.addContextItem(this, 'testIdentifier', 'goToLoginPageFO_1', baseContext);
+        const pageTitle = await foProductPage.getPageTitle(page);
+        await expect(pageTitle.toUpperCase()).to.contains(ProductData.firstProductData.name);
+      });
 
-      await foHomePage.goToLoginPage(page);
-      const pageTitle = await foLoginPage.getPageTitle(page);
-      await expect(pageTitle, 'Fail to open FO login page').to.contains(foLoginPage.pageTitle);
-    });
+      it('should add product to cart and proceed to checkout', async function () {
+        await testContext.addContextItem(this, 'testIdentifier', 'addProductToCart_1', baseContext);
 
-    it('should sign in with default customer', async function () {
-      await testContext.addContextItem(this, 'testIdentifier', 'sighInFO_1', baseContext);
+        await foProductPage.addProductToTheCart(page);
 
-      await foLoginPage.customerLogin(page, DefaultCustomer);
-      const isCustomerConnected = await foLoginPage.isCustomerConnected(page);
-      await expect(isCustomerConnected, 'Customer is not connected').to.be.true;
-    });
+        const notificationsNumber = await cartPage.getCartNotificationsNumber(page);
+        await expect(notificationsNumber).to.be.equal(1);
+      });
 
-    it('should go to the first product page', async function () {
-      await testContext.addContextItem(this, 'testIdentifier', 'goToFirstProductPage_1', baseContext);
+      it('should verify the total after discount', async function () {
+        await testContext.addContextItem(this, 'testIdentifier', 'verifyTotalAfterDiscount', baseContext);
 
-      // Go to home page
-      await foLoginPage.goToHomePage(page);
+        const discountedPrice = Products.demo_1.finalPrice
+          - (Products.demo_1.finalPrice * cartRuleWithoutCode.discountPercent / 100);
 
-      await foHomePage.goToProductPage(page, 1);
-      const pageTitle = await foProductPage.getPageTitle(page);
-      await expect(pageTitle.toUpperCase()).to.contains(ProductData.firstProductData.name);
-    });
+        const priceATI = await cartPage.getATIPrice(page);
+        await expect(priceATI).to.equal(parseFloat(discountedPrice.toFixed(2)));
 
-    it('should add product to cart', async function () {
-      await testContext.addContextItem(this, 'testIdentifier', 'addProductToCart_1', baseContext);
+        const cartRuleName = await cartPage.getCartRuleName(page);
+        await expect(cartRuleName).to.equal(cartRuleWithoutCode.name);
 
-      await foProductPage.addProductToTheCart(page);
+        const discountValue = await cartPage.getDiscountValue(page);
+        await expect(discountValue).to.equal(parseFloat(discountedPrice.toFixed(2)) - Products.demo_1.finalPrice);
+      });
 
-      // getNumberFromText is used to get the notifications number in the cart
-      const notificationsNumber = await cartPage.getNumberFromText(page, foProductPage.cartProductsCount);
-      await expect(notificationsNumber).to.be.equal(1);
-    });
+      it('should remove product from shopping cart', async function () {
+        await testContext.addContextItem(this, 'testIdentifier', 'removeProductFromShoppingCart', baseContext);
 
-    it('should verify the total before discount', async function () {
-      await testContext.addContextItem(this, 'testIdentifier', 'verifyTotalBeforeDiscount_1', baseContext);
+        await cartPage.deleteProduct(page, 1);
 
-      const priceATI = await cartPage.getATIPrice(page);
-      await expect(priceATI).to.equal(Products.demo_1.finalPrice);
-    });
-
-    it('should set the promo code', async function () {
-      await testContext.addContextItem(this, 'testIdentifier', 'addPromoCode_1', baseContext);
-
-      await cartPage.addPromoCode(page, newCartRuleData.code);
-    });
-
-    it('should verify the total after discount', async function () {
-      await testContext.addContextItem(this, 'testIdentifier', 'verifyTotalAfterDiscount_1', baseContext);
-
-      const discountedPrice = Products.demo_1.finalPrice
-        - (Products.demo_1.finalPrice * newCartRuleData.discountPercent / 100);
-
-      const priceATI = await cartPage.getATIPrice(page);
-      await expect(priceATI).to.equal(parseFloat(discountedPrice.toFixed(2)));
-    });
-
-    it('should sign out from FO', async function () {
-      await testContext.addContextItem(this, 'testIdentifier', 'sighOutFO_1', baseContext);
-
-      await cartPage.logout(page);
-      const isCustomerConnected = await cartPage.isCustomerConnected(page);
-      await expect(isCustomerConnected, 'Customer is connected').to.be.false;
+        const notificationsNumber = await cartPage.getCartNotificationsNumber(page);
+        await expect(notificationsNumber).to.be.equal(0);
+      });
     });
   });
 
-  describe('Update cart rule', async () => {
+  /*describe('Update cart rule', async () => {
     it('should go back to BO', async function () {
       await testContext.addContextItem(this, 'testIdentifier', 'goBackToBo_1', baseContext);
 
@@ -290,5 +323,5 @@ describe('CRUD cart rule', async () => {
       const validationMessage = await cartRulesPage.deleteCartRule(page);
       await expect(validationMessage).to.contains(cartRulesPage.successfulDeleteMessage);
     });
-  });
+  });*/
 });

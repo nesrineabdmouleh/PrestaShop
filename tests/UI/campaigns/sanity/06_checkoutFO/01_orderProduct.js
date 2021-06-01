@@ -79,7 +79,7 @@ describe('Order a product and check order confirmation', async () => {
   it('should check the cart details', async function () {
     await testContext.addContextItem(this, 'testIdentifier', 'checkCartDetails', baseContext);
 
-    const result = await cartPage.getProductDetail(page, 1);
+    const result = await cartPage.getProductDetails(page, 1);
     await Promise.all([
       expect(result.name).to.equal(CartData.customCartData.firstProduct.name),
       expect(result.price).to.equal(CartData.customCartData.firstProduct.price),

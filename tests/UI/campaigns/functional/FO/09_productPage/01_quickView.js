@@ -265,7 +265,7 @@ describe('Product quick view', async () => {
       const notificationsNumber = await homePage.getCartNotificationsNumber(page);
       await expect(notificationsNumber).to.be.equal(combination.quantity);
 
-      let result = await cartPage.getProductDetail(page, 1);
+      let result = await cartPage.getProductDetails(page, 1);
       await Promise.all([
         expect(result.name.toUpperCase()).to.equal(firstProductData.name),
         expect(result.regularPrice).to.equal(firstProductData.regular_price),

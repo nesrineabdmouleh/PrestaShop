@@ -85,7 +85,7 @@ describe('Check Cart in FO', async () => {
 
   it('should check the first product details', async function () {
     await testContext.addContextItem(this, 'testIdentifier', 'checkProductDetail1', baseContext);
-    const result = await cartPage.getProductDetail(page, 1);
+    const result = await cartPage.getProductDetails(page, 1);
     await Promise.all([
       expect(result.name).to.equal(CartData.customCartData.firstProduct.name),
       expect(result.price).to.equal(CartData.customCartData.firstProduct.price),
@@ -95,7 +95,7 @@ describe('Check Cart in FO', async () => {
 
   it('should check the second product details', async function () {
     await testContext.addContextItem(this, 'testIdentifier', 'checkProductDetail2', baseContext);
-    const result = await cartPage.getProductDetail(page, 2);
+    const result = await cartPage.getProductDetails(page, 2);
     await Promise.all([
       expect(result.name).to.equal(CartData.customCartData.secondProduct.name),
       expect(result.price).to.equal(CartData.customCartData.secondProduct.price),

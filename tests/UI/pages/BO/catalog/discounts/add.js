@@ -92,10 +92,10 @@ class AddCartRule extends BOBasePage {
     await this.setValue(page, this.descriptionTextArea, cartRuleData.description);
 
     // Generate a discount code
-    if (cartRuleData.code) {
-      await this.setValue(page, this.codeInput, cartRuleData.code);
-    } else {
+    if (cartRuleData.generateCode) {
       await page.click(this.generateButton);
+    } else {
+      await this.setValue(page, this.codeInput, cartRuleData.code);
     }
 
     // Set toggles

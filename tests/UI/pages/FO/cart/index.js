@@ -8,7 +8,7 @@ class Cart extends FOBasePage {
     this.pageTitle = 'Cart';
 
     // Selectors for cart page
-    this.cartGridBlock = 'div.cart-grid';
+    // Shopping cart block selectors
     this.productItem = number => `#main li:nth-of-type(${number})`;
     this.productName = number => `${this.productItem(number)} div.product-line-info a`;
     this.productRegularPrice = number => `${this.productItem(number)} span.regular-price`;
@@ -20,25 +20,35 @@ class Cart extends FOBasePage {
     this.productColor = number => `${this.productItem(number)} div.product-line-info.color span.value`;
     this.productImage = number => `${this.productItem(number)} span.product-image img`;
     this.deleteIcon = number => `${this.productItem(number)} .remove-from-cart`;
-    this.proceedToCheckoutButton = '#main div.checkout a';
-    this.disabledProceedToCheckoutButton = '#main div.checkout button.disabled';
+
+    // Cart summary block selectors
+    this.itemsNumber = '#cart-subtotal-products span.label.js-subtotal';
     this.subtotalDiscountValueSpan = '#cart-subtotal-discount span.value';
     this.cartTotalATI = '.cart-summary-totals span.value';
-    this.itemsNumber = '#cart-subtotal-products span.label.js-subtotal';
-    this.alertWarning = '.checkout.cart-detailed-actions.card-block div.alert.alert-warning';
+    this.blockPromoDiv = '.block-promo';
+    this.cartSummaryLine = line => `${this.blockPromoDiv} li:nth-child(${line}).cart-summary-line`;
+    this.cartRuleName = line => `${this.cartSummaryLine(line)} span.label`;
+    this.discountValue = line => `${this.cartSummaryLine(line)} div span`;
+
     this.promoCodeLink = '#main div.block-promo a[href=\'#promo-code\']';
     this.promoInput = '#promo-code input.promo-input';
     this.addPromoCodeButton = '#promo-code button.btn-primary';
+
+    this.alertWarning = '.checkout.cart-detailed-actions.card-block div.alert.alert-warning';
+
+    this.proceedToCheckoutButton = '#main div.checkout a';
+    this.disabledProceedToCheckoutButton = '#main div.checkout button.disabled';
   }
 
+  // Shopping cart methods
   /**
-   * Get Product detail from cart
+   * Get product details from cart
    * @param page {Page} Browser tab
    * @param row {number} Row number in the table
    * @returns {Promise<{discountPercentage: *, image: *, quantity: number, size: *, color: *, totalPrice: *,
    * price: number, regularPrice: number, name: *}>}
    */
-  async getProductDetail(page, row) {
+  async getProductDetails(page, row) {
     return {
       name: await this.getTextContent(page, this.productName(row)),
       regularPrice: await this.getPriceFromText(page, this.productRegularPrice(row)),
@@ -64,16 +74,6 @@ class Cart extends FOBasePage {
   }
 
   /**
-   * Click on Proceed to checkout button
-   * @param page {Page} Browser tab
-   * @returns {Promise<void>}
-   */
-  async clickOnProceedToCheckout(page) {
-    await this.waitForVisibleSelector(page, this.proceedToCheckoutButton);
-    await this.clickAndWaitForNavigation(page, this.proceedToCheckoutButton);
-  }
-
-  /**
    * To edit the product quantity
    * @param page {Page} Browser tab
    * @param productID {number} ID of the product
@@ -96,8 +96,9 @@ class Cart extends FOBasePage {
     await this.waitForSelectorAndClick(page, this.deleteIcon(productID));
   }
 
+  // Shopping cart summary methods
   /**
-   * Get All tax included price
+   * Get all tax included price
    * @param page {Page} Browser tab
    * @returns {Promise<number>}
    */
@@ -151,6 +152,36 @@ class Cart extends FOBasePage {
     await page.click(this.promoCodeLink);
     await this.setValue(page, this.promoInput, code);
     await page.click(this.addPromoCodeButton);
+  }
+
+  /**
+   * Get cart rule name
+   * @param page {Page} Browser tab
+   * @param line {number} Cart summary line
+   * @returns {Promise<number>}
+   */
+  getCartRuleName(page, line = 1) {
+    return this.getTextContent(page, this.cartRuleName(line), 2000);
+  }
+
+  /**
+   * Get discount value
+   * @param page
+   * @param line {number} Cart summary line
+   * @returns {Promise<number>}
+   */
+  getDiscountValue(page, line = 1) {
+    return this.getPriceFromText(page, this.discountValue(line), 2000);
+  }
+
+  /**
+   * Click on Proceed to checkout button
+   * @param page {Page} Browser tab
+   * @returns {Promise<void>}
+   */
+  async clickOnProceedToCheckout(page) {
+    await this.waitForVisibleSelector(page, this.proceedToCheckoutButton);
+    await this.clickAndWaitForNavigation(page, this.proceedToCheckoutButton);
   }
 }
 
