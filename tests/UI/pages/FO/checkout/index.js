@@ -181,6 +181,27 @@ class Checkout extends FOBasePage {
   }
 
   /**
+   * Agree terms of service
+   * @param page {Page} Browser tab
+   * @returns {Promise<void>}
+   */
+  async agreeTermsOfService(page) {
+    await Promise.all([
+      this.waitForVisibleSelector(page, this.paymentConfirmationButton),
+      page.check(this.conditionToApproveCheckbox),
+    ]);
+  }
+
+  /**
+   * click on place order
+   * @param page {Page} Browser tab
+   * @returns {Promise<void>}
+   */
+  async placeOrder(page) {
+    await this.clickAndWaitForNavigation(page, this.paymentConfirmationButton);
+  }
+
+  /**
    * Choose payment method and validate Order
    * @param page {Page} Browser tab
    * @param paymentModuleName {string} The chosen payment method
@@ -188,11 +209,8 @@ class Checkout extends FOBasePage {
    */
   async choosePaymentAndOrder(page, paymentModuleName) {
     await page.click(this.paymentOptionInput(paymentModuleName));
-    await Promise.all([
-      this.waitForVisibleSelector(page, this.paymentConfirmationButton),
-      page.click(this.conditionToApproveLabel),
-    ]);
-    await this.clickAndWaitForNavigation(page, this.paymentConfirmationButton);
+    await this.agreeTermsOfService(page);
+    await this.placeOrder(page);
   }
 
   /**

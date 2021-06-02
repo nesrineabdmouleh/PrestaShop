@@ -148,10 +148,13 @@ class Cart extends FOBasePage {
    * Set promo code
    * @param page {Page} Browser tab
    * @param code {string} The promo code
+   * @param clickOnPromoCodeLink {boolean} True if we need to click on promo code link
    * @returns {Promise<void>}
    */
-  async addPromoCode(page, code) {
-    await page.click(this.promoCodeLink);
+  async addPromoCode(page, code, clickOnPromoCodeLink = true) {
+    if (clickOnPromoCodeLink) {
+      await page.click(this.promoCodeLink);
+    }
     await this.setValue(page, this.promoInput, code);
     await page.click(this.addPromoCodeButton);
   }

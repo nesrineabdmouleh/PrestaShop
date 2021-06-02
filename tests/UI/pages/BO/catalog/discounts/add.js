@@ -140,14 +140,14 @@ class AddCartRule extends BOBasePage {
     }
 
     // Fill minimum amount values
-    await this.setValue(page, this.minimumAmountInput, cartRuleData.minimumAmount.value.toString());
+    await this.setValue(page, this.minimumAmountInput, cartRuleData.minimumAmount.value);
     await this.selectByVisibleText(page, this.minimumAmountCurrencySelect, cartRuleData.minimumAmount.currency);
     await this.selectByVisibleText(page, this.minimumAmountTaxSelect, cartRuleData.minimumAmount.tax);
     await this.selectByVisibleText(page, this.minimumAmountShippingSelect, cartRuleData.minimumAmount.shipping);
 
     // Fill quantities
-    await this.setValue(page, this.quantityInput, cartRuleData.quantity.toString());
-    await this.setValue(page, this.quantityPerUserInput, cartRuleData.quantityPerUser.toString());
+    await this.setValue(page, this.quantityInput, cartRuleData.quantity);
+    await this.setValue(page, this.quantityPerUserInput, cartRuleData.quantityPerUser);
   }
 
 
@@ -167,12 +167,12 @@ class AddCartRule extends BOBasePage {
     switch (cartRuleData.discountType) {
       case 'Percent':
         await page.check(this.discountPercentRadioButton);
-        await this.setValue(page, this.discountPercentInput, cartRuleData.discountPercent.toString());
+        await this.setValue(page, this.discountPercentInput, cartRuleData.discountPercent);
         await page.check(this.excludeDiscountProductsToggle(cartRuleData.excludeDiscountProducts ? 'on' : 'off'));
         break;
       case 'Amount':
         await page.check(this.discountAmountRadioButton);
-        await this.setValue(page, this.discountAmountInput, cartRuleData.discountAmount.value.toString());
+        await this.setValue(page, this.discountAmountInput, cartRuleData.discountAmount.value);
         await this.selectByVisibleText(page, this.discountAmountCurrencySelect, cartRuleData.discountAmount.currency);
         await this.selectByVisibleText(page, this.discountAmountTaxSelect, cartRuleData.discountAmount.tax);
         break;

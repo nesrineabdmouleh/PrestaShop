@@ -5,7 +5,7 @@ module.exports = class CartRule {
     // Information
     this.name = cartRuleToCreate.name || faker.commerce.department();
     this.description = faker.lorem.sentence();
-    this.code = cartRuleToCreate.code;
+    this.code = cartRuleToCreate.code || null;
     this.generateCode = cartRuleToCreate.generateCode || false;
     this.highlight = cartRuleToCreate.highlight === undefined ? false : cartRuleToCreate.highlight;
     this.partialUse = cartRuleToCreate.partialUse === undefined ? true : cartRuleToCreate.partialUse;
@@ -34,7 +34,7 @@ module.exports = class CartRule {
     this.discountType = cartRuleToCreate.discountType || 'None';
     if (this.discountType === 'Percent') {
       this.discountPercent = cartRuleToCreate.discountPercent || faker.random.number({min: 10, max: 80});
-    } else if (this.discountPercent === 'Amount') {
+    } else if (this.discountType === 'Amount') {
       this.discountAmount = {
         value: cartRuleToCreate.discountAmount === undefined ? 0 : cartRuleToCreate.discountAmount.value,
         currency: cartRuleToCreate.discountAmount === undefined ? 'EUR' : cartRuleToCreate.discountAmount.currency,
