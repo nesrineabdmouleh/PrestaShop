@@ -33,6 +33,7 @@ class Cart extends FOBasePage {
     this.promoCodeLink = '#main div.block-promo a[href=\'#promo-code\']';
     this.promoInput = '#promo-code input.promo-input';
     this.addPromoCodeButton = '#promo-code button.btn-primary';
+    this.promoCodeRemoveIcon = line => `${this.cartSummaryLine(line)} a[data-link-action='remove-voucher']`;
 
     this.alertWarning = '.checkout.cart-detailed-actions.card-block div.alert.alert-warning';
 
@@ -94,6 +95,7 @@ class Cart extends FOBasePage {
    */
   async deleteProduct(page, productID) {
     await this.waitForSelectorAndClick(page, this.deleteIcon(productID));
+    await this.waitForHiddenSelector(page, this.deleteIcon(productID));
   }
 
   // Shopping cart summary methods
@@ -166,12 +168,23 @@ class Cart extends FOBasePage {
 
   /**
    * Get discount value
-   * @param page
+   * @param page {Page} Browser tab
    * @param line {number} Cart summary line
    * @returns {Promise<number>}
    */
   getDiscountValue(page, line = 1) {
     return this.getPriceFromText(page, this.discountValue(line), 2000);
+  }
+
+  /**
+   * Remove voucher
+   * @param page {Page} Browser tab
+   * @param line {number} Cart summary line
+   * @returns {Promise<void>}
+   */
+  async removeVoucher(page, line = 1) {
+    await this.waitForSelectorAndClick(page, this.promoCodeRemoveIcon(line));
+    await this.waitForHiddenSelector(page, this.promoCodeRemoveIcon(line));
   }
 
   /**
