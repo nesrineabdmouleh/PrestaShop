@@ -186,7 +186,7 @@ describe('View vouchers on FO account page', async () => {
       it(`should check the existence of the created cart code ${cartRule.code}`, async function () {
         await testContext.addContextItem(this, 'testIdentifier', `checkVoucher${index}`, baseContext);
 
-        const cartRuleCodeFromTable = await foVouchersPage.getVoucherCodeFromTable(page, index + 1);
+        const cartRuleCodeFromTable = await foVouchersPage.getTextColumnFromTable(page, index + 1);
         await expect(cartRuleCodeFromTable).to.equal(cartRule.code);
       });
     });

@@ -94,12 +94,16 @@ class AddCartRule extends BOBasePage {
     // Generate a discount code
     if (cartRuleData.generateCode) {
       await page.click(this.generateButton);
+    } else if (cartRuleData.code === null) {
+      await this.deleteTextFromInput(page, this.codeInput);
     } else {
       await this.setValue(page, this.codeInput, cartRuleData.code);
     }
 
     // Set toggles
-    await page.check(this.highlightToggle(cartRuleData.highlight ? 'on' : 'off'));
+    if (cartRuleData.code !== null) {
+      await page.check(this.highlightToggle(cartRuleData.highlight ? 'on' : 'off'));
+    }
     await page.check(this.partialUseToggle(cartRuleData.partialUse ? 'on' : 'off'));
 
     // Set priority
@@ -153,8 +157,8 @@ class AddCartRule extends BOBasePage {
 
   /**
    * Fill actions tab
-   * @param page
-   * @param cartRuleData
+   * @param page {Page} Browser tab
+   * @param cartRuleData {cartRuleData} Data to set on cart rule form
    * @return {Promise<void>}
    */
   async fillActionsForm(page, cartRuleData) {
@@ -202,8 +206,8 @@ class AddCartRule extends BOBasePage {
 
   /**
    * Create/edit cart rule
-   * @param page
-   * @param cartRuleData
+   * @param page {Page} Browser tab
+   * @param cartRuleData {cartRuleData} Data to set on cart rule form
    * @returns {Promise<string>}
    */
   async createEditCartRules(page, cartRuleData) {
@@ -219,6 +223,18 @@ class AddCartRule extends BOBasePage {
     // Save and return successful message
     await this.clickAndWaitForNavigation(page, this.saveButton);
     return this.getAlertSuccessBlockContent(page);
+  }
+
+  /**
+   * Get cart rule customer concerned
+   * @param page {Page} Browser tab
+   * @returns {Promise<string>}
+   */
+  async getCartRuleCustomer(page) {
+    // Go to tab conditions
+    await page.click(this.conditionsTabLink);
+
+    return this.getAttributeContent(page, this.singleCustomerInput, 'value');
   }
 }
 

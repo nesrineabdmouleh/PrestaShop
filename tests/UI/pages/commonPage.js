@@ -188,6 +188,14 @@ class CommonPage {
     await page.reload();
   }
 
+  async deleteTextFromInput(page, selector) {
+    await this.waitForSelectorAndClick(page, selector);
+    await page.click(selector, {clickCount: 3});
+    // Delete text from input before typing
+    await page.waitForTimeout(100);
+    await page.press(selector, 'Delete');
+  }
+
   /**
    * Delete the existing text from input then set a value
    * @param page {Page} Browser tab
