@@ -72,8 +72,10 @@ class AddCartRule extends BOBasePage {
     this.sendFreeGifToggle = toggle => `${this.cartRuleForm} #free_gift_${toggle}`;
     this.freeGiftFilterInput = '#giftProductFilter';
     this.freeGiftProductSelect = '#gift_product';
+
     // Form footer selectors
     this.saveButton = '#desc-cart_rule-save';
+    this.cancelButton = '#desc-cart_rule-cancel';
   }
 
   /* Methods */
@@ -235,6 +237,15 @@ class AddCartRule extends BOBasePage {
     await page.click(this.conditionsTabLink);
 
     return this.getAttributeContent(page, this.singleCustomerInput, 'value');
+  }
+
+  /**
+   * Click on cancel button
+   * @param page {Page} Browser tab
+   * @returns {Promise<void>}
+   */
+  async cancelPage(page) {
+    await this.clickAndWaitForNavigation(page, this.cancelButton);
   }
 }
 
