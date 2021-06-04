@@ -148,7 +148,7 @@ describe('Catalog - Discounts : CRUD cart rule', async () => {
   describe('case 1 : Create cart rule without code then check it on FO', async () => {
     describe('Create cart rule on BO', async () => {
       it('should go to new cart rule page', async function () {
-        await testContext.addContextItem(this, 'testIdentifier', 'goToNewCartRulePage', baseContext);
+        await testContext.addContextItem(this, 'testIdentifier', 'goToNewCartRulePage1', baseContext);
 
         await cartRulesPage.goToAddNewCartRulesPage(page);
 
@@ -157,7 +157,7 @@ describe('Catalog - Discounts : CRUD cart rule', async () => {
       });
 
       it('should create new cart rule', async function () {
-        await testContext.addContextItem(this, 'testIdentifier', 'createCartRule', baseContext);
+        await testContext.addContextItem(this, 'testIdentifier', 'createCartRule1', baseContext);
 
         const validationMessage = await addCartRulePage.createEditCartRules(page, cartRuleWithoutCode);
         await expect(validationMessage).to.contains(addCartRulePage.successfulCreationMessage);
@@ -166,7 +166,7 @@ describe('Catalog - Discounts : CRUD cart rule', async () => {
 
     describe('Verify discount on FO', async () => {
       it('should view my shop', async function () {
-        await testContext.addContextItem(this, 'testIdentifier', 'viewMyShopToCheckCreatedDiscount', baseContext);
+        await testContext.addContextItem(this, 'testIdentifier', 'viewMyShop1', baseContext);
 
         // View my shop and init pages
         page = await addCartRulePage.viewMyShop(page);
@@ -177,7 +177,7 @@ describe('Catalog - Discounts : CRUD cart rule', async () => {
       });
 
       it('should go to the first product page', async function () {
-        await testContext.addContextItem(this, 'testIdentifier', 'goToFirstProductPage_1', baseContext);
+        await testContext.addContextItem(this, 'testIdentifier', 'goToFirstProductPage1', baseContext);
 
         await foHomePage.goToProductPage(page, 1);
 
@@ -186,7 +186,7 @@ describe('Catalog - Discounts : CRUD cart rule', async () => {
       });
 
       it('should add product to cart and proceed to checkout', async function () {
-        await testContext.addContextItem(this, 'testIdentifier', 'addProductToCart_1', baseContext);
+        await testContext.addContextItem(this, 'testIdentifier', 'addProductToCart1', baseContext);
 
         await foProductPage.addProductToTheCart(page);
 
@@ -195,7 +195,7 @@ describe('Catalog - Discounts : CRUD cart rule', async () => {
       });
 
       it('should verify the total after discount', async function () {
-        await testContext.addContextItem(this, 'testIdentifier', 'verifyTotalAfterDiscount', baseContext);
+        await testContext.addContextItem(this, 'testIdentifier', 'verifyTotalAfterDiscount1', baseContext);
 
         const totalAfterDiscount = Products.demo_1.finalPrice
           - (Products.demo_1.finalPrice * cartRuleWithoutCode.discountPercent / 100);
@@ -211,7 +211,7 @@ describe('Catalog - Discounts : CRUD cart rule', async () => {
       });
 
       it('should remove product from shopping cart', async function () {
-        await testContext.addContextItem(this, 'testIdentifier', 'removeProductFromShoppingCart', baseContext);
+        await testContext.addContextItem(this, 'testIdentifier', 'removeProductFromShoppingCart1', baseContext);
 
         await cartPage.deleteProduct(page, 1);
 
@@ -241,7 +241,7 @@ describe('Catalog - Discounts : CRUD cart rule', async () => {
       if (index === 0) {
         describe('Create cart rule on BO', async () => {
           it('should go back to BO', async function () {
-            await testContext.addContextItem(this, 'testIdentifier', 'goBackToBo_2', baseContext);
+            await testContext.addContextItem(this, 'testIdentifier', `goBackToBo${index + 2}`, baseContext);
 
             // Close tab and init other page objects with new current tab
             page = await foHomePage.closePage(browserContext, page, 0);
@@ -251,7 +251,7 @@ describe('Catalog - Discounts : CRUD cart rule', async () => {
           });
 
           it('should go to new cart rule page', async function () {
-            await testContext.addContextItem(this, 'testIdentifier', 'goToNewCartRulePage', baseContext);
+            await testContext.addContextItem(this, 'testIdentifier', `goToNewCartRulePage${index + 2}`, baseContext);
 
             await cartRulesPage.goToAddNewCartRulesPage(page);
 
@@ -260,7 +260,7 @@ describe('Catalog - Discounts : CRUD cart rule', async () => {
           });
 
           it('should create new cart rule', async function () {
-            await testContext.addContextItem(this, 'testIdentifier', 'createCartRule', baseContext);
+            await testContext.addContextItem(this, 'testIdentifier', `createCartRule${index + 2}`, baseContext);
 
             const validationMessage = await addCartRulePage.createEditCartRules(page, test.args.cartRuleData);
             await expect(validationMessage).to.contains(addCartRulePage.successfulCreationMessage);
@@ -271,7 +271,7 @@ describe('Catalog - Discounts : CRUD cart rule', async () => {
       if (index !== 0) {
         describe('Update cart rule on BO', async () => {
           it('should go back to BO', async function () {
-            await testContext.addContextItem(this, 'testIdentifier', 'goBackToBo_2', baseContext);
+            await testContext.addContextItem(this, 'testIdentifier', `goBackToBo${index + 2}`, baseContext);
 
             // Close tab and init other page objects with new current tab
             page = await foHomePage.closePage(browserContext, page, 0);
@@ -281,7 +281,7 @@ describe('Catalog - Discounts : CRUD cart rule', async () => {
           });
 
           it('should search for the cart rule to edit', async function () {
-            await testContext.addContextItem(this, 'testIdentifier', 'searchCartRuleToUpdate', baseContext);
+            await testContext.addContextItem(this, 'testIdentifier', `searchCartRuleToUpdate${index + 2}`, baseContext);
 
             await cartRulesPage.filterCartRules(page, 'input', 'name', test.args.cartRuleToUpdate.name);
 
@@ -290,7 +290,7 @@ describe('Catalog - Discounts : CRUD cart rule', async () => {
           });
 
           it('should go to edit cart rule page', async function () {
-            await testContext.addContextItem(this, 'testIdentifier', 'goToEditCartRulePage', baseContext);
+            await testContext.addContextItem(this, 'testIdentifier', `goToEditCartRulePage${index + 2}`, baseContext);
 
             await cartRulesPage.goToEditCartRulePage(page, 1);
 
@@ -299,7 +299,7 @@ describe('Catalog - Discounts : CRUD cart rule', async () => {
           });
 
           it('should update cart rule', async function () {
-            await testContext.addContextItem(this, 'testIdentifier', 'updateCartRule', baseContext);
+            await testContext.addContextItem(this, 'testIdentifier', `updateCartRule${index + 2}`, baseContext);
 
             const validationMessage = await addCartRulePage.createEditCartRules(page, test.args.cartRuleData);
             await expect(validationMessage).to.contains(addCartRulePage.successfulUpdateMessage);
@@ -309,7 +309,7 @@ describe('Catalog - Discounts : CRUD cart rule', async () => {
 
       describe('Verify discount on FO', async () => {
         it('should view my shop', async function () {
-          await testContext.addContextItem(this, 'testIdentifier', 'viewMyShopToCheckCreatedDiscount', baseContext);
+          await testContext.addContextItem(this, 'testIdentifier', `viewMyShop${index + 2}`, baseContext);
 
           // View my shop and init pages
           page = await addCartRulePage.viewMyShop(page);
@@ -320,7 +320,7 @@ describe('Catalog - Discounts : CRUD cart rule', async () => {
         });
 
         it('should go to the first product page', async function () {
-          await testContext.addContextItem(this, 'testIdentifier', 'goToFirstProductPage_1', baseContext);
+          await testContext.addContextItem(this, 'testIdentifier', `goToFirstProductPage${index + 2}`, baseContext);
 
           await foHomePage.goToProductPage(page, 1);
 
@@ -329,7 +329,7 @@ describe('Catalog - Discounts : CRUD cart rule', async () => {
         });
 
         it('should add product to cart and proceed to checkout', async function () {
-          await testContext.addContextItem(this, 'testIdentifier', 'addProductToCart_1', baseContext);
+          await testContext.addContextItem(this, 'testIdentifier', `addProductToCart${index + 2}`, baseContext);
 
           await foProductPage.addProductToTheCart(page);
 
@@ -338,7 +338,7 @@ describe('Catalog - Discounts : CRUD cart rule', async () => {
         });
 
         it('should verify the total before the second discount', async function () {
-          await testContext.addContextItem(this, 'testIdentifier', 'verifyTotalBeforeDiscount_1', baseContext);
+          await testContext.addContextItem(this, 'testIdentifier', `checkTotalBeforeDiscount${index + 2}`, baseContext);
 
           const discountedPrice = Products.demo_1.finalPrice
             - (Products.demo_1.finalPrice * cartRuleWithoutCode.discountPercent / 100);
@@ -348,7 +348,7 @@ describe('Catalog - Discounts : CRUD cart rule', async () => {
         });
 
         it('should set the promo code', async function () {
-          await testContext.addContextItem(this, 'testIdentifier', 'addPromoCode_1', baseContext);
+          await testContext.addContextItem(this, 'testIdentifier', `addPromoCode${index + 2}`, baseContext);
 
           if (test.args.cartRuleData === cartRuleHighlightDisabled) {
             await cartPage.addPromoCode(page, test.args.cartRuleData.code);
@@ -358,7 +358,7 @@ describe('Catalog - Discounts : CRUD cart rule', async () => {
         });
 
         it('should verify the total after the second discount', async function () {
-          await testContext.addContextItem(this, 'testIdentifier', 'verifyTotalAfterDiscount', baseContext);
+          await testContext.addContextItem(this, 'testIdentifier', `checkTotalAfterDiscount${index + 2}`, baseContext);
 
           const totalPrice = Products.demo_1.finalPrice
             - (Products.demo_1.finalPrice * cartRuleWithoutCode.discountPercent / 100);
@@ -376,7 +376,7 @@ describe('Catalog - Discounts : CRUD cart rule', async () => {
         });
 
         it('should remove voucher and product from shopping cart', async function () {
-          await testContext.addContextItem(this, 'testIdentifier', 'removeProductFromShoppingCart', baseContext);
+          await testContext.addContextItem(this, 'testIdentifier', `removeProduct${index + 2}`, baseContext);
 
           await cartPage.removeVoucher(page, 2);
           await cartPage.deleteProduct(page, 1);
@@ -410,7 +410,7 @@ describe('Catalog - Discounts : CRUD cart rule', async () => {
       if (test.args.cartRuleData === cartRulePartialUseDisabled) {
         describe('Create cart rule on BO', async () => {
           it('should go to new cart rule page', async function () {
-            await testContext.addContextItem(this, 'testIdentifier', 'goToNewCartRulePage', baseContext);
+            await testContext.addContextItem(this, 'testIdentifier', `goToNewCartRulePage${index + 4}`, baseContext);
 
             await cartRulesPage.goToAddNewCartRulesPage(page);
 
@@ -419,7 +419,7 @@ describe('Catalog - Discounts : CRUD cart rule', async () => {
           });
 
           it('should create new cart rule', async function () {
-            await testContext.addContextItem(this, 'testIdentifier', 'createCartRule', baseContext);
+            await testContext.addContextItem(this, 'testIdentifier', `createCartRule${index + 4}`, baseContext);
 
             const validationMessage = await addCartRulePage.createEditCartRules(page, test.args.cartRuleData);
             await expect(validationMessage).to.contains(addCartRulePage.successfulCreationMessage);
@@ -430,7 +430,7 @@ describe('Catalog - Discounts : CRUD cart rule', async () => {
       if (test.args.cartRuleData === cartRulePartialUseEnabled) {
         describe('Update cart rule on BO', async () => {
           it('should go back to BO', async function () {
-            await testContext.addContextItem(this, 'testIdentifier', 'goBackToBo_2', baseContext);
+            await testContext.addContextItem(this, 'testIdentifier', `goBackToBo${index + 4}`, baseContext);
 
             // Close tab and init other page objects with new current tab
             page = await foHomePage.closePage(browserContext, page, 0);
@@ -440,7 +440,7 @@ describe('Catalog - Discounts : CRUD cart rule', async () => {
           });
 
           it('should search for the cart rule to edit', async function () {
-            await testContext.addContextItem(this, 'testIdentifier', 'searchCartRuleToUpdate', baseContext);
+            await testContext.addContextItem(this, 'testIdentifier', `searchCartRuleToUpdate${index + 4}`, baseContext);
 
             await cartRulesPage.filterCartRules(page, 'input', 'name', cartRuleHighlightEnabled.name);
 
@@ -449,7 +449,7 @@ describe('Catalog - Discounts : CRUD cart rule', async () => {
           });
 
           it('should go to edit cart rule page', async function () {
-            await testContext.addContextItem(this, 'testIdentifier', 'goToEditCartRulePage', baseContext);
+            await testContext.addContextItem(this, 'testIdentifier', `goToEditCartRulePage${index + 4}`, baseContext);
 
             await cartRulesPage.goToEditCartRulePage(page, 1);
 
@@ -458,7 +458,7 @@ describe('Catalog - Discounts : CRUD cart rule', async () => {
           });
 
           it('should update cart rule', async function () {
-            await testContext.addContextItem(this, 'testIdentifier', 'updateCartRule', baseContext);
+            await testContext.addContextItem(this, 'testIdentifier', `updateCartRule${index + 4}`, baseContext);
 
             const validationMessage = await addCartRulePage.createEditCartRules(page, test.args.cartRuleData);
             await expect(validationMessage).to.contains(addCartRulePage.successfulUpdateMessage);
@@ -468,7 +468,7 @@ describe('Catalog - Discounts : CRUD cart rule', async () => {
 
       describe('Verify discount on FO', async () => {
         it('should view my shop', async function () {
-          await testContext.addContextItem(this, 'testIdentifier', 'viewMyShopToCheckCreatedDiscount', baseContext);
+          await testContext.addContextItem(this, 'testIdentifier', `viewMyShop${index + 2}`, baseContext);
 
           // View my shop and init pages
           page = await addCartRulePage.viewMyShop(page);
@@ -480,7 +480,7 @@ describe('Catalog - Discounts : CRUD cart rule', async () => {
 
         if (index === 0) {
           it('should go to login page', async function () {
-            await testContext.addContextItem(this, 'testIdentifier', 'goToLoginPageFO_1', baseContext);
+            await testContext.addContextItem(this, 'testIdentifier', 'goToLoginPageFO', baseContext);
 
             await foHomePage.goToLoginPage(page);
 
@@ -489,7 +489,7 @@ describe('Catalog - Discounts : CRUD cart rule', async () => {
           });
 
           it('should sign in with default customer', async function () {
-            await testContext.addContextItem(this, 'testIdentifier', 'sighInFO_1', baseContext);
+            await testContext.addContextItem(this, 'testIdentifier', 'sighInFO', baseContext);
 
             await foLoginPage.customerLogin(page, DefaultCustomer);
 
@@ -499,7 +499,7 @@ describe('Catalog - Discounts : CRUD cart rule', async () => {
         }
 
         it('should go to the first product page', async function () {
-          await testContext.addContextItem(this, 'testIdentifier', 'goToFirstProductPage_1', baseContext);
+          await testContext.addContextItem(this, 'testIdentifier', `goToFirstProductPage${index + 4}`, baseContext);
 
           // Go to home page
           await foLoginPage.goToHomePage(page);
@@ -511,7 +511,7 @@ describe('Catalog - Discounts : CRUD cart rule', async () => {
         });
 
         it('should add product to cart and proceed to checkout', async function () {
-          await testContext.addContextItem(this, 'testIdentifier', 'addProductToCart_1', baseContext);
+          await testContext.addContextItem(this, 'testIdentifier', `addProductToCart${index + 4}`, baseContext);
 
           await foProductPage.addProductToTheCart(page);
 
@@ -520,7 +520,7 @@ describe('Catalog - Discounts : CRUD cart rule', async () => {
         });
 
         it('should verify the total before the discount created', async function () {
-          await testContext.addContextItem(this, 'testIdentifier', 'verifyTotalBeforeDiscount_1', baseContext);
+          await testContext.addContextItem(this, 'testIdentifier', `checkTotalBeforeDiscount${index + 4}`, baseContext);
 
           const priceATI = await cartPage.getATIPrice(page);
           await expect(priceATI).to.equal(0.00);
@@ -533,7 +533,7 @@ describe('Catalog - Discounts : CRUD cart rule', async () => {
         });
 
         it('should go to delivery step', async function () {
-          await testContext.addContextItem(this, 'testIdentifier', 'addProductToCart_1', baseContext);
+          await testContext.addContextItem(this, 'testIdentifier', `goToDeliveryStep${index + 4}`, baseContext);
 
           // Proceed to checkout the shopping cart
           await cartPage.clickOnProceedToCheckout(page);
@@ -544,7 +544,7 @@ describe('Catalog - Discounts : CRUD cart rule', async () => {
         });
 
         it('should go to payment step', async function () {
-          await testContext.addContextItem(this, 'testIdentifier', 'addProductToCart_1', baseContext);
+          await testContext.addContextItem(this, 'testIdentifier', `goToPaymentStep${index + 4}`, baseContext);
 
           // Delivery step - Go to payment step
           const isStepDeliveryComplete = await checkoutPage.goToPaymentStep(page);
@@ -552,7 +552,7 @@ describe('Catalog - Discounts : CRUD cart rule', async () => {
         });
 
         it('should check that there is no payment methods and check \'Agree terms of service\'', async function () {
-          await testContext.addContextItem(this, 'testIdentifier', 'addProductToCart_1', baseContext);
+          await testContext.addContextItem(this, 'testIdentifier', `checkPaymentMethods${index + 4}`, baseContext);
 
           // Check payment method existence
           let isVisible = await checkoutPage.isPaymentMethodExist(page, PaymentMethods.wirePayment.moduleName);
@@ -563,7 +563,7 @@ describe('Catalog - Discounts : CRUD cart rule', async () => {
         });
 
         it('should check \'Agree terms of service\' and place order', async function () {
-          await testContext.addContextItem(this, 'testIdentifier', 'addProductToCart_1', baseContext);
+          await testContext.addContextItem(this, 'testIdentifier', `placeOrder${index + 4}`, baseContext);
 
           // Agree terms of service
           await checkoutPage.agreeTermsOfService(page);
@@ -577,7 +577,7 @@ describe('Catalog - Discounts : CRUD cart rule', async () => {
         });
 
         it('should go to \'My account\' page', async function () {
-          await testContext.addContextItem(this, 'testIdentifier', 'goToMyAccountPage', baseContext);
+          await testContext.addContextItem(this, 'testIdentifier', `goToMyAccountPage${index + 4}`, baseContext);
 
           // Go to home page
           await orderHistory.goToHomePage(page);
@@ -590,7 +590,7 @@ describe('Catalog - Discounts : CRUD cart rule', async () => {
         });
 
         it('should go to \'My account > Vouchers\' page', async function () {
-          await testContext.addContextItem(this, 'testIdentifier', 'goToMyAccountPage', baseContext);
+          await testContext.addContextItem(this, 'testIdentifier', `goToMyVoucherPage${index + 4}`, baseContext);
 
           await myAccountPage.goToVouchersPage(page);
 
@@ -600,7 +600,7 @@ describe('Catalog - Discounts : CRUD cart rule', async () => {
 
         if (test.args.cartRuleData === cartRulePartialUseEnabled) {
           it('should verify the voucher generated', async function () {
-            await testContext.addContextItem(this, 'testIdentifier', 'goToMyAccountPage', baseContext);
+            await testContext.addContextItem(this, 'testIdentifier', 'verifyGeneratedVoucher', baseContext);
 
             const discountValue = (Products.demo_1.finalPrice * cartRuleWithoutCode.discountPercent / 100);
 
@@ -620,7 +620,7 @@ describe('Catalog - Discounts : CRUD cart rule', async () => {
           });
         } else {
           it('should verify that there is only one voucher', async function () {
-            await testContext.addContextItem(this, 'testIdentifier', 'goToMyAccountPage', baseContext);
+            await testContext.addContextItem(this, 'testIdentifier', 'verifyVoucher', baseContext);
 
             const code = await vouchersPage.getTextColumnFromTable(page, 1, 'code');
             await expect(code).to.equal('');
@@ -640,7 +640,7 @@ describe('Catalog - Discounts : CRUD cart rule', async () => {
       if (test.args.cartRuleData === cartRulePartialUseEnabled) {
         describe('Verify the cart rule created on BO', async () => {
           it('should go back to BO', async function () {
-            await testContext.addContextItem(this, 'testIdentifier', 'goBackToBo_2', baseContext);
+            await testContext.addContextItem(this, 'testIdentifier', `goBackToBo${index + 4}`, baseContext);
 
             // Close tab and init other page objects with new current tab
             page = await foHomePage.closePage(browserContext, page, 0);
@@ -650,7 +650,7 @@ describe('Catalog - Discounts : CRUD cart rule', async () => {
           });
 
           it('should search for the cart rule', async function () {
-            await testContext.addContextItem(this, 'testIdentifier', 'searchCartRuleToUpdate', baseContext);
+            await testContext.addContextItem(this, 'testIdentifier', `searchCartRuleToUpdate${index + 4}`, baseContext);
 
             await cartRulesPage.filterCartRules(page, 'input', 'name', test.args.cartRuleData.name);
 
@@ -664,7 +664,7 @@ describe('Catalog - Discounts : CRUD cart rule', async () => {
 
 
           it('should go to edit cart rule page', async function () {
-            await testContext.addContextItem(this, 'testIdentifier', 'goToEditCartRulePage', baseContext);
+            await testContext.addContextItem(this, 'testIdentifier', `goToEditCartRulePage${index + 4}`, baseContext);
 
             await cartRulesPage.goToEditCartRulePage(page, 1);
 
@@ -673,7 +673,7 @@ describe('Catalog - Discounts : CRUD cart rule', async () => {
           });
 
           it('should check in conditions tab that the cart rule is limited to a single customer', async function () {
-            await testContext.addContextItem(this, 'testIdentifier', 'updateCartRule', baseContext);
+            await testContext.addContextItem(this, 'testIdentifier', `updateCartRule${index + 4}`, baseContext);
 
             const customer = await addCartRulePage.getCartRuleCustomer(page);
             await expect(customer).to.contains(DefaultCustomer.email);
@@ -682,7 +682,7 @@ describe('Catalog - Discounts : CRUD cart rule', async () => {
 
         describe('Delete all cart rules created by bulk actions', async () => {
           it('should go to \'Cart rules\' page', async function () {
-            await testContext.addContextItem(this, 'testIdentifier', 'deleteCartRule', baseContext);
+            await testContext.addContextItem(this, 'testIdentifier', 'cancelPage', baseContext);
 
             await addCartRulePage.cancelPage(page);
 
@@ -703,7 +703,7 @@ describe('Catalog - Discounts : CRUD cart rule', async () => {
       } else {
         describe('Delete cart rule created', async () => {
           it('should go back to BO', async function () {
-            await testContext.addContextItem(this, 'testIdentifier', 'goBackToBo_2', baseContext);
+            await testContext.addContextItem(this, 'testIdentifier', `goBackToBo${index + 4}`, baseContext);
 
             // Close tab and init other page objects with new current tab
             page = await foHomePage.closePage(browserContext, page, 0);
@@ -713,7 +713,7 @@ describe('Catalog - Discounts : CRUD cart rule', async () => {
           });
 
           it('should delete cart rule', async function () {
-            await testContext.addContextItem(this, 'testIdentifier', 'bulkDelete', baseContext);
+            await testContext.addContextItem(this, 'testIdentifier', 'deleteCartRule', baseContext);
 
             const validationMessage = await cartRulesPage.deleteCartRule(page);
             await expect(validationMessage).to.contains(cartRulesPage.successfulDeleteMessage);
