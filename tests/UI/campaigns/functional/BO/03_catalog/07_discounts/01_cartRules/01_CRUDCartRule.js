@@ -468,7 +468,7 @@ describe('Catalog - Discounts : CRUD cart rule', async () => {
 
       describe('Verify discount on FO', async () => {
         it('should view my shop', async function () {
-          await testContext.addContextItem(this, 'testIdentifier', `viewMyShop${index + 2}`, baseContext);
+          await testContext.addContextItem(this, 'testIdentifier', `viewMyShop${index + 4}`, baseContext);
 
           // View my shop and init pages
           page = await addCartRulePage.viewMyShop(page);
