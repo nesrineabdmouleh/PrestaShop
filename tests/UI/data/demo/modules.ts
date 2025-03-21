@@ -27,7 +27,7 @@ export default {
   psEmailAlerts: new FakerModule({
     tag: 'ps_emailalerts',
     name: 'Mail alerts',
-    releaseZip: 'https://github.com/PrestaShop/ps_emailalerts/releases/download/v3.0.0/ps_emailalerts.zip',
+    releaseZip: 'https://github.com/PrestaShop/ps_emailalerts/releases/download/v3.0.1/ps_emailalerts.zip',
   }),
   psEmailSubscription: new FakerModule({
     tag: 'ps_emailsubscription',
@@ -36,7 +36,7 @@ export default {
   psFacetedSearch: new FakerModule({
     tag: 'ps_facetedsearch',
     name: 'Faceted search',
-    releaseZip: 'https://github.com/PrestaShop/ps_facetedsearch/releases/download/v3.15.1/ps_facetedsearch.zip',
+    releaseZip: 'https://github.com/PrestaShop/ps_facetedsearch/releases/download/v3.16.1/ps_facetedsearch.zip',
   }),
   psGdpr: new FakerModule({
     tag: 'psgdpr',
@@ -49,7 +49,7 @@ export default {
   psThemeCusto: new FakerModule({
     tag: 'ps_themecusto',
     name: 'Theme Customization',
-    releaseZip: 'https://github.com/PrestaShop/ps_themecusto/releases/download/v1.2.4/ps_themecusto.zip',
+    releaseZip: 'https://github.com/PrestaShop/ps_themecusto/releases/download/v1.2.5/ps_themecusto.zip',
   }),
   contactForm: new FakerModule({
     tag: 'contactform',
